@@ -6,7 +6,7 @@ void main() {
   bootstrap(
     Env(
       name: 'DEV',
-      apiBaseUrl: 'https://api.dev.example.commm ',
+      apiBaseUrl: 'https://api.dev.example.commmm ',
       flavor: Flavors.dev,
     ),
   );
