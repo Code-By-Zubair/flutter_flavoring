@@ -47,11 +47,11 @@ jobs:
           name: staging-apk
           path: build/app/outputs/flutter-apk/app-stage-release.apk
 
-      # 7. Distribute via Firebase App Distribution
+      # 7. Distribute via Firebase App Distribution using TOKEN
       - name: Upload to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID_STAGE }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
           file: build/app/outputs/flutter-apk/app-stage-release.apk
