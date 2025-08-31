@@ -18,8 +18,8 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0' # Use your version
-          cache: true  # Enables pub cache automatically
+          flutter-version: '3.29.0' # Match your local version
+          cache: true
 
       # 3. Cache Gradle
       - name: Cache Gradle
@@ -32,21 +32,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # 4. Get Dependencies
+      # 4. Install Dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # 5. Run Tests (Optional)
-      # - name: Run tests
-      #   run: flutter test
-
-      # 6. Build APK for Staging
+      # 5. Build APK for Stage Flavor
       - name: Build Staging APK
         run: flutter build apk --flavor stage -t lib/main_stage.dart
 
-      # 7. Upload Artifact (APK)
-      - name: Upload APK
+      # 6. Upload Artifact (Optional)
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: staging-apk
           path: build/app/outputs/flutter-apk/app-stage-release.apk
+
+      # 7. Distribute via Firebase App Distribution
+      - name: Upload to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_STAGE }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-stage-release.apk
